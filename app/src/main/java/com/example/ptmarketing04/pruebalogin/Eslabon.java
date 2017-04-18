@@ -142,7 +142,6 @@ public class Eslabon extends AppCompatActivity {
 
 
     ///////Task para registrar un nuevo usuario
-    ///////Task para comprobar conexcion de usuario
     class RegistroTask extends AsyncTask<String, String, JSONArray> {
         private ProgressDialog pDialog;
         int add;
@@ -153,7 +152,6 @@ public class Eslabon extends AppCompatActivity {
             pDialog.setMessage("Cargando...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
-            Log.e("pre carga: ", url_consulta);
             pDialog.show();
         }
 
@@ -161,11 +159,11 @@ public class Eslabon extends AppCompatActivity {
         protected JSONArray doInBackground(String... args) {
             try {
                 HashMap<String, String> parametrosPost = new HashMap<>();
-                parametrosPost.put("ins_sql",  "INSERT INTO `Usuarios`(`ID_user`, `Name`, `Email`, `Password`) VALUES (4,'" + uname + "','" + uemail + "','" + upass + "')");
+                parametrosPost.put("ins_sql",  "INSERT INTO `Usuarios`(`ID_user`, `Name`, `Email`, `Password`) VALUES (3,'" + uname + "','" + uemail + "','" + upass + "')");
 
-                Log.e("carga: ", parametrosPost.get("ins_sql"));
                 jSONArray = devuelveJSON.sendRequest(url_consulta, parametrosPost);
 
+                Log.e("array",jSONArray.toString());
                 if (jSONArray != null) {
                     return jSONArray;
                 }
@@ -191,13 +189,13 @@ public class Eslabon extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                if(add!=0){
+              /*  if(add!=0){
                     Toast.makeText(Eslabon.this, "Registro guardado",
                             Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(Eslabon.this, "ha ocurrido un error",
                             Toast.LENGTH_LONG).show();
-                }
+                }*/
 
             } else {
                 Toast.makeText(Eslabon.this, "JSON Array nulo",
