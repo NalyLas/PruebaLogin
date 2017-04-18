@@ -188,6 +188,15 @@ public class Eslabon extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                   /*********************************
+                estas añadiendo pero no consigues controlar lo que devuelve
+                    prueba a hacer un sendrequest como el de la app de megasur
+                    que recoja el objeto json en lugar de un array
+                    porque lo que devuelves no se puede convertir a array
+                    y cambia el task para trabajar segun eso
+
+                ********************************/
+
               /*  if(add!=0){
                     Toast.makeText(Eslabon.this, "Registro guardado",
                             Toast.LENGTH_LONG).show();
