@@ -21,7 +21,9 @@ public class Eslabon extends AppCompatActivity {
     EditText etname, etemail, etpass;
     ArrayList<String> usuarios;
     private String url_consulta = "http://iesayala.ddns.net/natalia/php.php";
+    private String url_subida = "http://iesayala.ddns.net/natalia/prueba.php";
     private JSONArray jSONArray;
+    protected JSONObject jsonObject;
     private DevuelveJSON devuelveJSON;
     private User user;
     private ArrayList<User> arrayUsuarios;
@@ -39,6 +41,7 @@ public class Eslabon extends AppCompatActivity {
         etemail = (EditText)findViewById(R.id.etLogEmail);
 
         url_consulta = "http://iesayala.ddns.net/natalia/php.php";
+        url_subida = "http://iesayala.ddns.net/natalia/prueba.php";
 
         devuelveJSON = new DevuelveJSON();
         new ComprobarLoguin().execute();
@@ -46,6 +49,7 @@ public class Eslabon extends AppCompatActivity {
     }
 
     public void  insertarRegistro(View view){
+        boolean exist = false;
         if(!etname.getText().equals("") && !etemail.getText().equals("") && !etpass.getText().equals("")){
             uname = etname.getText().toString();
             uemail = etemail.getText().toString();
@@ -55,18 +59,18 @@ public class Eslabon extends AppCompatActivity {
                 if(uemail.equals(arrayUsuarios.get(i).getEmail())){
                     Toast.makeText(Eslabon.this, "Existe un usuario con ese email",
                             Toast.LENGTH_LONG).show();
+                    exist = true;
                     break;
-                }else{
-                    new RegistroTask().execute();
                 }
             }
 
-           // new RegistroTask().execute();
+            if(!exist){
+                new RegistroTask().execute();
+            }
         }else{
             Toast.makeText(Eslabon.this, "Rellena todos los campos",
                     Toast.LENGTH_LONG).show();
         }
-
 
     }
 
@@ -138,8 +142,10 @@ public class Eslabon extends AppCompatActivity {
 
 
     ///////Task para registrar un nuevo usuario
+    ///////Task para comprobar conexcion de usuario
     class RegistroTask extends AsyncTask<String, String, JSONArray> {
         private ProgressDialog pDialog;
+        int add;
 
         @Override
         protected void onPreExecute() {
@@ -153,10 +159,9 @@ public class Eslabon extends AppCompatActivity {
 
         @Override
         protected JSONArray doInBackground(String... args) {
-
             try {
                 HashMap<String, String> parametrosPost = new HashMap<>();
-                parametrosPost.put("ins_sql", "INSERT INTO `Usuarios`(`ID_user`, `Name`, `Email`, `Password`) VALUES (0," + uname + "," + uemail + "," + upass + ")");
+                parametrosPost.put("ins_sql",  "INSERT INTO `Usuarios`(`ID_user`, `Name`, `Email`, `Password`) VALUES (4,'" + uname + "','" + uemail + "','" + upass + "')");
 
                 Log.e("carga: ", parametrosPost.get("ins_sql"));
                 jSONArray = devuelveJSON.sendRequest(url_consulta, parametrosPost);
@@ -174,27 +179,30 @@ public class Eslabon extends AppCompatActivity {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.dismiss();
             }
-           /* if (json != null) {
-                arrayUsuarios =new ArrayList<User>();
-                for (int i = 0; i < json.length(); i++) {
+            if (json != null) {
                     try {
-                        JSONObject jsonObject = json.getJSONObject(i);
-                        user = new User();
-                        user.setId(jsonObject.getInt("ID_user"));
-                        user.setName(jsonObject.getString("Name"));
-                        user.setEmail(jsonObject.getString("Email"));
-                        user.setPass(jsonObject.getString("Password"));
-                        arrayUsuarios.add(user);
+                        JSONObject jsonObject = json.getJSONObject(0);
+                        add = jsonObject.getInt("added");
+                        Log.e("objeto:--->",""+jsonObject.getInt("added"));
+                        Log.e("añadido:--->",""+add);
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
+                if(add!=0){
+                    Toast.makeText(Eslabon.this, "Registro guardado",
+                            Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(Eslabon.this, "ha ocurrido un error",
+                            Toast.LENGTH_LONG).show();
                 }
 
             } else {
                 Toast.makeText(Eslabon.this, "JSON Array nulo",
                         Toast.LENGTH_LONG).show();
-            }*/
+            }
 
         }
 
