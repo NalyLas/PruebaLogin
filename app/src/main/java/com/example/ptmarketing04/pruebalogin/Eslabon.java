@@ -161,7 +161,7 @@ public class Eslabon extends AppCompatActivity {
                 HashMap<String, String> parametrosPost = new HashMap<>();
                 parametrosPost.put("ins_sql",  "INSERT INTO `Usuarios`(`ID_user`, `Name`, `Email`, `Password`) VALUES (3,'" + uname + "','" + uemail + "','" + upass + "')");
 
-                jSONArray = devuelveJSON.sendRequest(url_consulta, parametrosPost);
+                jSONArray = devuelveJSON.sendRequest(url_subida, parametrosPost);
 
                 Log.e("array",jSONArray.toString());
                 if (jSONArray != null) {
@@ -181,8 +181,7 @@ public class Eslabon extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = json.getJSONObject(0);
                         add = jsonObject.getInt("added");
-                        Log.e("objeto:--->",""+jsonObject.getInt("added"));
-                        Log.e("añadido:--->",""+add);
+                        Log.e("add:----->",add+"");
 
 
                     } catch (JSONException e) {
