@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
                 comprobarUser();
                 break;
             case R.id.bt4:
+                Intent intent = new Intent(this, Eslabon.class);
+                startActivity(intent);
                 break;
             case R.id.bt5:
                 break;
