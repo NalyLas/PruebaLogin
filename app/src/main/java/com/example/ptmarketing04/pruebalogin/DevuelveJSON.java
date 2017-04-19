@@ -8,6 +8,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -81,6 +82,56 @@ public class DevuelveJSON {
         return jArray;
     }
 
+    public JSONObject sendDMLRequest(String link, HashMap<String, String> values)
+            throws JSONException {
+        JSONObject jobject=null;
+        try {
+            URL url = new URL(link);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(CONNECTION_TIMEOUT);
+            conn.setConnectTimeout(CONNECTION_TIMEOUT);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            conn.connect();
+
+            if (values != null) {
+                OutputStream os = conn.getOutputStream();
+                OutputStreamWriter osWriter = new OutputStreamWriter(os, "UTF-8");
+                BufferedWriter writer = new BufferedWriter(osWriter);
+                writer.write(getPostData(values));
+                writer.flush();
+                writer.close();
+                os.close();
+            }
+
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
+                BufferedReader r = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder result = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    result.append(line);
+                }
+
+                try {
+                    jobject = new JSONObject(result.toString());
+                    return jobject;
+                } catch (JSONException e) {
+                    Log.e("ERROR => ", "Error convirtiendo los datos a JSON222 : " + e.toString());
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+        } catch (MalformedURLException e) {
+        } catch (IOException e) {
+            e.getMessage();
+        }
+        return jobject;
+    }
+
     public String getPostData(HashMap<String, String> values) {
         StringBuilder builder = new StringBuilder();
         boolean first = true;
@@ -100,6 +151,9 @@ public class DevuelveJSON {
         }
         return builder.toString();
     }
+
+
+
 }
 
 

@@ -142,7 +142,7 @@ public class Eslabon extends AppCompatActivity {
 
 
     ///////Task para registrar un nuevo usuario
-    class RegistroTask extends AsyncTask<String, String, JSONArray> {
+    class RegistroTask extends AsyncTask<String, String, JSONObject> {
         private ProgressDialog pDialog;
         int add;
 
@@ -156,16 +156,15 @@ public class Eslabon extends AppCompatActivity {
         }
 
         @Override
-        protected JSONArray doInBackground(String... args) {
+        protected JSONObject doInBackground(String... args) {
             try {
                 HashMap<String, String> parametrosPost = new HashMap<>();
                 parametrosPost.put("ins_sql",  "INSERT INTO `Usuarios`(`ID_user`, `Name`, `Email`, `Password`) VALUES (3,'" + uname + "','" + uemail + "','" + upass + "')");
 
-                jSONArray = devuelveJSON.sendRequest(url_subida, parametrosPost);
+                jsonObject = devuelveJSON.sendDMLRequest(url_subida, parametrosPost);
 
-                Log.e("array",jSONArray.toString());
-                if (jSONArray != null) {
-                    return jSONArray;
+                if (jsonObject != null) {
+                    return jsonObject;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -173,37 +172,24 @@ public class Eslabon extends AppCompatActivity {
             return null;
         }
 
-        protected void onPostExecute(JSONArray json) {
+        protected void onPostExecute(JSONObject json) {
             if (pDialog != null && pDialog.isShowing()) {
                 pDialog.dismiss();
             }
             if (json != null) {
                     try {
-                        JSONObject jsonObject = json.getJSONObject(0);
-                        add = jsonObject.getInt("added");
-                        Log.e("add:----->",add+"");
-
-
+                        add = json.getInt("added");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                   /*********************************
-                estas añadiendo pero no consigues controlar lo que devuelve
-                    prueba a hacer un sendrequest como el de la app de megasur
-                    que recoja el objeto json en lugar de un array
-                    porque lo que devuelves no se puede convertir a array
-                    y cambia el task para trabajar segun eso
-
-                ********************************/
-
-              /*  if(add!=0){
+                if(add!=0){
                     Toast.makeText(Eslabon.this, "Registro guardado",
                             Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(Eslabon.this, "ha ocurrido un error",
                             Toast.LENGTH_LONG).show();
-                }*/
+                }
 
             } else {
                 Toast.makeText(Eslabon.this, "JSON Array nulo",
