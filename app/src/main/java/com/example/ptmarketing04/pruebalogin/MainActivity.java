@@ -60,6 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    //Para obtener el ultimo registro e una tabla
+    //SELECT * FROM `usuario` ORDER BY `etiqueta` DESC LIMIT 1
+
+
+
+
     public void crearNot(View view){
         switch(view.getId())
         {
