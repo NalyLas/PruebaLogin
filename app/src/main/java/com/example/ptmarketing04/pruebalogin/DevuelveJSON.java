@@ -107,7 +107,6 @@ public class DevuelveJSON {
             }
 
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
                 BufferedReader r = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder result = new StringBuilder();
                 String line;
